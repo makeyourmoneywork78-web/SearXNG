@@ -3,7 +3,14 @@
 #
 # Only the keys that differ from SearXNG defaults are set; everything else is
 # inherited via use_default_settings so this stays small and upgrade-safe.
-use_default_settings: true
+use_default_settings:
+  engines:
+    keep_only:
+      - bing
+      - github
+      - arxiv
+      - semantic scholar
+      - pubmed
 
 search:
   # THE critical line: the JSON API is disabled by default (formats: [html]),
@@ -34,29 +41,6 @@ outgoing:
   request_timeout: 6.0
   max_request_timeout: 10.0
 
-# Disable engines that were verified to be unreliable for this deployment.
-# The remaining engines include working general/search and specialist sources.
-engines:
-  - name: wikipedia
-    disabled: true
-
-  - name: duckduckgo
-    disabled: true
-
-  - name: google cse
-    disabled: true
-
-  - name: google scholar
-    disabled: true
-
-  - name: startpage
-    disabled: true
-
-  - name: brave
-    disabled: true
-
-  - name: reuters
-    disabled: true
-
-  - name: stackoverflow
-    disabled: true
+# Keep only engines that were directly verified to return results from this deployment.
+# This avoids spending time on default engines that are blocked, rate-limited, or CAPTCHA-protected.
+engines: []
