@@ -33,3 +33,30 @@ outgoing:
   # request. The app layers its own per-request and per-company deadlines on top.
   request_timeout: 6.0
   max_request_timeout: 10.0
+
+# Disable engines that were verified to be unreliable for this deployment.
+# The remaining engines include working general/search and specialist sources.
+engines:
+  - name: wikipedia
+    disabled: true
+
+  - name: duckduckgo
+    disabled: true
+
+  - name: google cse
+    disabled: true
+
+  - name: google scholar
+    disabled: true
+
+  - name: startpage
+    disabled: true
+
+  - name: brave
+    disabled: true
+
+  - name: reuters
+    disabled: true
+
+  - name: stackoverflow
+    disabled: true
