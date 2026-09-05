@@ -1,8 +1,5 @@
 # SearXNG configuration for the epfo_smart_discovery search backend.
-# marker: epfo_smart_discovery  (used by render-entrypoint.sh to detect install)
-#
-# Only the keys that differ from SearXNG defaults are set; everything else is
-# inherited via use_default_settings so this stays small and upgrade-safe.
+# Only the keys that differ from SearXNG defaults are set.
 use_default_settings:
   engines:
     keep_only:
@@ -13,34 +10,43 @@ use_default_settings:
       - pubmed
 
 search:
-  # THE critical line: the JSON API is disabled by default (formats: [html]),
-  # and there is no environment override for it. The app calls
-  # /search?format=json, so json MUST be enabled here or every call 403s.
   formats:
     - html
     - json
   safe_search: 1
 
 server:
-  # The app queries SearXNG with HTTP GET; the SearXNG default is POST, which
-  # rejects the app's GET search requests. Force GET.
   method: "GET"
-  # Placeholder secret; render-entrypoint.sh injects a random per-boot value via
-  # $SEARXNG_SECRET (which overrides this) when one is not already provided.
   secret_key: "ultrasecretkey"
-  # Private backend: only our app calls it, so disable the bot limiter that
-  # would otherwise 429 automated JSON traffic. (Default is already false; set
-  # explicitly so a future default flip cannot break us.)
   limiter: false
   public_instance: false
   image_proxy: false
 
 outgoing:
-  # Bound each upstream engine call so one slow engine cannot stall the whole
-  # request. The app layers its own per-request and per-company deadlines on top.
   request_timeout: 6.0
   max_request_timeout: 10.0
 
-# Keep only engines that were directly verified to return results from this deployment.
-# This avoids spending time on default engines that are blocked, rate-limited, or CAPTCHA-protected.
-engines: []
+# Explicitly enable the verified engines and assign their categories.
+# Bing is the primary general-web engine; the others support technical/scientific searches.
+engines:
+  - name: bing
+    disabled: false
+    categories:
+      - general
+  - name: github
+    disabled: false
+    categories:
+      - it
+      - general
+  - name: arxiv
+    disabled: false
+    categories:
+      - science
+  - name: semantic scholar
+    disabled: false
+    categories:
+      - science
+  - name: pubmed
+    disabled: false
+    categories:
+      - science
